@@ -1,0 +1,14 @@
+brew install fish
+fish
+echo (which fish) | sudo tee -a /etc/shells
+chsh -s (which fish)
+curl -L http://get.oh-my.fish | fish
+omf install bobthefish
+brew tap caskroom/fonts
+brew cask install font-firacode-nerd-font
+set -U theme_nerd_fonts yes
+
+
+
+Enter fish_vi_mode to use VI.
+
