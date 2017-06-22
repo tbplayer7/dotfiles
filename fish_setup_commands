@@ -10,5 +10,5 @@ set -U theme_nerd_fonts yes
 
 
 
-Enter fish_vi_mode to use VI.
+Enter fish_vi_key_bindings to use VI.
 
