@@ -13,16 +13,22 @@ export GOPATH=$HOME/go
 export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
-export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export KUBE_EDITOR='vim'
 
+HISTFILE=~/.zsh_history
 
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ssh/.ansible_vault_pass
 
+alias tf="/usr/local/bin/terraform"
+alias pg="ping 8.8.8.8"
+alias prc="pr-me | pbcopy"
 alias goland="/usr/local/bin/goland"
 alias kc="kubectl"
-alias ccode="cd ~/Code/c2fo/"
-alias cgo="cd ~/go/src/github.com/c2fo"
+alias ls="ls -alh"
+alias ..="cd ../ && ls -alh"
+alias ccode="cd ~/Code/c2fo/ && clear && ls -alh"
+alias cgo="cd ~/go/src/github.com/c2fo && clear && ls -alh"
 alias kcg="kubectl config get-contexts"
 alias kcu="kubectl config use-context"
 alias kcl="kubectl logs "
@@ -30,9 +36,8 @@ alias kcdp="kubectl describe pod "
 alias ran="ranger"
 alias alog="aws ecr get-login --registry-ids 602401143452 --no-include-email"
 alias watch='watch '
-alias kcdebug='kubectl run -i --rm --tty debug --image=busybox --restart=Never -- sh'
-alias newr='ssh -i .ssh/eva.rsa jstephens@jstephens-nr-candidate-lab-app.westus.cloudapp.azure.com'
-
+alias kcdebug='kubectl run -i --rm --tty debug --image=centos --restart=Never -- bash'
+alias kcc='kubectl run -it --rm --image=centos centos -- bash'
 
 #PowerlineSettings
 #POWERLEVEL9K_MODE="awesome-fontconfig"
@@ -46,6 +51,7 @@ POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='008' # Dark Grey
 POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='255' # Whitish
 POWERLEVEL9K_DIR_BACKGROUND='059' # Grey37
 POWERLEVEL9K_DIR_FOREGROUND='255' # Grey37
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 POWERLEVEL9K_VIRTUALENV_BACKGROUND='008'
 POWERLEVEL9K_VIRTUALENV_FOREGROUND='255'
 #POWERLEVEL9K_STATUS_BACKGROUND='059' # Grey37
@@ -82,6 +88,32 @@ alias kopsutil="ssh -i ~/.ssh/c2fochina.pem ec2-user@10.39.1.151"
 alias h="history"
 alias fltenv="export FLEETCTL_ENDPOINT=http://10.1.250.11:2379"
 
+kci () {
+        case "$1" in
+                (eksnp) kubectl config use-context eks-us-west-2-non-prod ;;
+                (eksp) kubectl config use-context eks-us-west-2-prod ;;
+                (dr) kubectl config use-context eks-us-east-1-dr ;;
+                (ekst) kubectl config use-context eks-us-west-2-testing ;;
+                (vaultdev) kubectl config use-context eks-us-west-2-sec-dev-test ;;
+                (gfss) kubectl config use-context gke_c2fo-application_us-west1-b_biggy ;;
+                (guat) kubectl config use-context gke_c2fo-application_us-west1-b_biggy ;;
+                (gprod) kubectl config use-context gke_c2fo-application_us-west1-a_prod-gke-us-west-1 ;;
+                (eufss) kubectl config use-context gke_c2fo-application_europe-west3-c_frankfurt-1 ;;
+                (euuat) kubectl config use-context gke_c2fo-application_europe-west3-c_frankfurt-1 ;;
+                (euprod) kubectl config use-context gke_c2fo-application_europe-west3-c_prod-gke-eu-west-3 ;;
+                (cnfss) kubectl config use-context beijing-1.k8s.local ;;
+                (cnman) kubectl config use-context manual-beijing-1.k8s.local ;;
+                (cnuat) kubectl config use-context beijing-1.k8s.local ;;
+                (cnprod) kubectl config use-context prod-aws-cn-north-1.k8s.local ;;
+                (inprod) kubectl config use-context eks-ap-south-1-prod ;;
+                (infss) kubectl config use-context eks-ap-south-1-non-prod ;;
+                (inuat) kubectl config use-context eks-ap-south-1-non-prod ;;
+                (indevload) kubectl config use-context eks-ap-south-1-testing ;;
+		(as2prod) kubectl config use-context gke_c2fo-application_europe-west3_eu-prod ;;
+		(as2nonprod) kubectl config use-context gke_c2fo-application_europe-west3_eu-nonprod ;;
+
+        esac
+}
 
 
 alias g!='git init' 
@@ -133,10 +165,11 @@ export GPG_TTY
 
 # virtual env
 
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/opt/python@2/bin/python2
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/devel
-source /usr/local/bin/virtualenvwrapper_lazy.sh
+source /usr/local/bin/virtualenvwrapper.sh
+
 
 # add ssh keys, because these always seem to go away after a reboot
 
@@ -192,8 +225,12 @@ COMPLETION_WAITING_DOTS="true"
 
 plugins=(
   git
-  vi-mode
-  zsh-completions
+  vi-mode 
+  zsh-completions 
+  osx 
+  sudo 
+  iterm2 
+  tmux 
 )
 
 autoload -U compinit && compinit
@@ -238,3 +275,10 @@ export PATH="~/bin/:$PATH"
 export NVM_DIR="/Users/jeff.stephens/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 export PATH="/usr/local/opt/helm@2/bin:$PATH"
+source /Users/jeff.stephens/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
